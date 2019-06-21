@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   serverElements = [{type: 'server', name: 'TestServer', content: 'Just a test'}];
-   
+  
   onServerAdded(serverData:{servername: string, severContent: string}) {
     this.serverElements.push({
       type: 'server',
@@ -23,4 +23,5 @@ export class AppComponent {
       content: bluePrintData.severContent
     });
   }
+  
 }
