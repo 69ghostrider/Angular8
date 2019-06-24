@@ -9,13 +9,21 @@
         <li class="list-group-item" *ngFor="let number of numbers" >
           {{number}}
         </li>
-      </ul>
-      <div *ngIf="onlyOdd" >
+      </ul> 
+      <div *appUnless="onlyOdd" >
           <li class="list-group-item" *ngFor="let number of oddNumbers" [ngClass]="{odd : number % 2 !==0}" [ngStyle]="{'background-color': number % 2 !==0 ? 'blue':'transparent'}">
               {{number}}
             </li>
-          </div>
+      </div>
           <p appBasicHighLight>This is basic highlight</p>
+          <p appBetterHighlight [defaultColor]="'orange'" [hightlightColor]="'blue'">This is better highlight</p>
+    </div>
+    <div [ngSwitch]="value">
+           <p *ngSwitchCase="1">this is 1</p>
+           <p *ngSwitchCase="2">this is 2</p>
+           <p *ngSwitchCase="3">this is 3</p>
+           <p *ngSwitchCase="4">this is 4</p>
+           <p *ngSwitchDefault>this is default</p>
     </div>
   </div>
 </div>
