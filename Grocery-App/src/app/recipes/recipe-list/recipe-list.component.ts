@@ -9,8 +9,8 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 export class RecipeListComponent implements OnInit {
   @Output() recipeWasSelected = new EventEmitter <Recipe>();
   recipes: Recipe[]  = [
-    new Recipe('Test Recipe', 'This is simple a test', 'https://tinyurl.com/y3vysn2h'),
-    new Recipe('Test Recipe', 'This is simple a test', 'https://tinyurl.com/y3vysn2h')
+    new Recipe('Test Recipe 1', 'This is simple a test 1', 'https://tinyurl.com/y3vysn2h'),
+    new Recipe('Test Recipe 2', 'This is simple a test 2', 'https://tinyurl.com/y3vysn2h')
   ];
   constructor() { }
 
