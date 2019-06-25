@@ -4,8 +4,8 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
-  providers:[AccountsService]
+  styleUrls: ['./app.component.css']
+  //providers:[AccountsService]   // Declared globally in app.module.ts
 })
 export class AppComponent implements OnInit {
   

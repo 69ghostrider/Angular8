@@ -6,8 +6,9 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css'],
-  providers:[LoggingService]  //no adding AccountsService as it it declared in parent and will be overitten 
+  styleUrls: ['./account.component.css']
+  //providers:[LoggingService]  //no adding AccountsService as it it declared in parent and will be overitten 
+                                //loggingService delared in app.module.ts
 })
 export class AccountComponent {
   @Input() account: {name: string, status: string};
@@ -16,8 +17,9 @@ export class AccountComponent {
   constructor(private loggingService: LoggingService, private accountsService: AccountsService){}
 
   onSetTo(status: string) {
-    this.loggingService.logStatusChange(status)   //injecting a logging service
+    // this.loggingService.logStatusChange(status)   //injecting a logging service
     this.accountsService.updateStatus(this.id,status);
+    this.accountsService.statusUpdates.emit(status)
   }
  
 }
