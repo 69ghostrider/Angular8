@@ -1,4 +1,4 @@
-import { Routes, RouterModule } from '@angular/router';
+import { AppLicationRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -13,21 +13,7 @@ import { EditServerComponent } from './servers/edit-server/edit-server.component
 import { ServerComponent } from './servers/server/server.component';
 import { ServersService } from './servers/servers.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
-const appRoutes : Routes = [
-  { path: 'users' , component: UsersComponent , children:[
-    { path: ':id/:name' , component: UserComponent},
-  ]},             //localhost:8084/users  (dont add /)
-  { path: '' , component: HomeComponent} ,
-  { path: 'servers' , component: ServersComponent, children:[
-      { path: ':id/edit' , component: EditServerComponent},
-      { path: ':id' , component: ServerComponent}
-  ]},
-  { path : 'not-found', component : PageNotFoundComponent},
-  { path : '**', redirectTo : '/not-found' }  //has to be the last one in the array of routes (wild card route)
-  //   
-//   { path: 'servers/:id/edit' , component: EditServerComponent},
-//   { path: 'servers/:id' , component: ServerComponent}    //putting these as children of servers routes
-]
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +28,7 @@ const appRoutes : Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    AppLicationRoutingModule
   ],
   providers: [ServersService],
   bootstrap: [AppComponent]
