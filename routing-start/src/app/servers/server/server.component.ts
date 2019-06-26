@@ -24,7 +24,7 @@ export class ServerComponent implements OnInit {
   }
 
   onEdit(){
-    this.router.navigate(['edit'],{relativeTo: this.route})   //already in sevrer  so no need to put /server/edit , only put edit
+    this.router.navigate(['edit'],{relativeTo: this.route , queryParamsHandling: 'preserve'})   //already in sevrer  so no need to put /server/edit , only put edit
   }
 
 }
