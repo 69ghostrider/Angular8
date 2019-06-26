@@ -13,10 +13,17 @@ import { EditServerComponent } from './servers/edit-server/edit-server.component
 import { ServerComponent } from './servers/server/server.component';
 import { ServersService } from './servers/servers.service';
 const appRoutes : Routes = [
-  { path: 'users' , component: UsersComponent},             //localhost:8084/users  (dont add /)
+  { path: 'users' , component: UsersComponent , children:[
+    { path: ':id/:name' , component: UserComponent},
+  ]},             //localhost:8084/users  (dont add /)
   { path: '' , component: HomeComponent} ,
-  { path: 'servers' , component: ServersComponent},
-  { path: 'users/:id/:name' , component: UsersComponent},  
+  { path: 'servers' , component: ServersComponent, children:[
+      { path: ':id/edit' , component: EditServerComponent},
+      { path: ':id' , component: ServerComponent}
+  ]},
+  //   
+//   { path: 'servers/:id/edit' , component: EditServerComponent},
+//   { path: 'servers/:id' , component: ServerComponent}    //putting these as children of servers routes
 ]
 @NgModule({
   declarations: [
