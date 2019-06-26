@@ -1,3 +1,4 @@
+import { AuthGuard } from './auth-guard.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { ServerComponent } from './servers/server/server.component';
 import { EditServerComponent } from './servers/edit-server/edit-server.component';
@@ -13,7 +14,7 @@ const appRoutes : Routes = [
       { path: ':id/:name' , component: UserComponent},
     ]},             //localhost:8084/users  (dont add /)
     { path: '' , component: HomeComponent} ,
-    { path: 'servers' , component: ServersComponent, children:[
+    { path: 'servers' , canActivate:[AuthGuard] , component: ServersComponent, children:[
         { path: ':id/edit' , component: EditServerComponent},
         { path: ':id' , component: ServerComponent}
     ]},

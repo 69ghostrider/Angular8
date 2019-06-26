@@ -1,3 +1,5 @@
+import { AuthGuard } from './auth-guard.service';
+import { AuthService } from './auth.service';
 import { AppLicationRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
@@ -30,7 +32,7 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
     FormsModule,
     AppLicationRoutingModule
   ],
-  providers: [ServersService],
+  providers: [ServersService, AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
