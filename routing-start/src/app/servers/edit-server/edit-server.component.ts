@@ -1,5 +1,5 @@
 import { Subscription } from 'rxjs';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
 import { ServersService } from '../servers.service';
@@ -14,7 +14,8 @@ export class EditServerComponent implements OnInit {
   serverName = '';
   serverStatus = '';
   allowEdit = false;
-  constructor(private serversService: ServersService, private route: ActivatedRoute) { }
+  changesSaved = false;
+  constructor(private serversService: ServersService, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
     this.route.queryParams.subscribe(
@@ -30,6 +31,8 @@ export class EditServerComponent implements OnInit {
 
   onUpdateServer() {
     this.serversService.updateServer(this.server.id, {name: this.serverName, status: this.serverStatus});
+    this.changesSaved = true;
+    this.router.navigate(['../'],{relativeTo: this.route});
   }
 
 }
