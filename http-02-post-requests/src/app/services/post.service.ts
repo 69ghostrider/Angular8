@@ -14,7 +14,10 @@ export class PostService {
     this.http
       .post(
         "https://ng-complete-guide-9cdc2.firebaseio.com/posts.json",
-        postData
+        postData,
+        {
+            observe:'response'   //to observer and consider only a part of response ,can also assign body,headers etc
+        }
       )
       .subscribe(
         responseData => {
@@ -62,7 +65,9 @@ export class PostService {
   deletePostData() {
     return this.http.delete(
       //if we dont put return then we cant subscribe in app.component.ts
-      "https://ng-complete-guide-9cdc2.firebaseio.com/posts.json"
+      "https://ng-complete-guide-9cdc2.firebaseio.com/posts.json",{
+          responseType:'text'                                    //set the responsetype to smething diff then what is returned
+      }
     );
   }
 }
