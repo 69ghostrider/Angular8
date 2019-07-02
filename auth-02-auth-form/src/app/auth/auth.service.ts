@@ -1,9 +1,11 @@
-import { throwError } from "rxjs";
-import { catchError } from "rxjs/operators";
-import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { catchError, tap } from "rxjs/operators";
+import { throwError, Subject } from "rxjs";
 
-interface AuthResponseData {
+import { User } from "./user.model";
+
+export interface AuthResponseData {
   kind: string;
   idToken: string;
   email: string;
@@ -15,11 +17,13 @@ interface AuthResponseData {
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
+  user = new Subject<User>();  //user is accessible throuout the appn
+
   constructor(private http: HttpClient) {}
-  signup<AuthResponseData>(email: string, password: string) {
-    //AuthResponseData tells Post the format of data
+
+  signup(email: string, password: string) {
     return this.http
-      .post(
+      .post<AuthResponseData>(
         "https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyCQPb_DZC1Ls5oFCTgpy6zCxTZJe17kbBE",
         {
           email: email,
@@ -28,41 +32,64 @@ export class AuthService {
         }
       )
       .pipe(
-        catchError(errResp => {
-          let errorMessage = "An Unknown Error Occured";
-          if (!errResp.error || !errResp.error.error) {
-            return throwError(errorMessage);
-          }
-          switch (errResp.error.error.message) {
-            case "EMAIL_Exists":
-              errorMessage = "This email exists already ";
-          }
-          return throwError(errorMessage);
+        catchError(this.handleError),
+        tap(resData => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,
+            resData.idToken,
+            +resData.expiresIn
+          );
         })
       );
   }
 
   login(email: string, password: string) {
-   return this.http.post<AuthResponseData>(
-      "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCQPb_DZC1Ls5oFCTgpy6zCxTZJe17kbBE",
-      {
-        email: email,
-        password: password,
-        returnSecureToken: true
-      }
-    ).pipe(
-        catchError(errResp => {
-            console.log(errResp)
-          let errorMessage = "An Unknown Error Occured";
-          if (!errResp.error || !errResp.error.error.errors[0]) {
-            return throwError(errorMessage);
-          }
-          switch (errResp.error.error.errors[0].message) {
-            case "EMAIL_NOT_FOUND":
-              errorMessage = "This user dosent Exits";
-          }
-          return throwError(errorMessage);
+    return this.http
+      .post<AuthResponseData>(
+        "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCQPb_DZC1Ls5oFCTgpy6zCxTZJe17kbBE",
+        {
+          email: email,
+          password: password,
+          returnSecureToken: true     //these are params expected by firebase API
+        }
+      )
+      .pipe(
+        catchError(this.handleError),
+        tap(resData => {
+          this.handleAuthentication(
+            resData.email,
+            resData.localId,         
+            resData.idToken,
+            +resData.expiresIn
+          );
         })
       );
+  }
+
+  private handleAuthentication(email: string,userId: string,token: string,expiresIn: number) 
+  {
+    const expirationDate = new Date(new Date().getTime() + expiresIn * 1000);
+    const user = new User(email, userId, token, expirationDate);
+    this.user.next(user);
+  }
+
+  private handleError(errorRes: HttpErrorResponse) {
+    let errorMessage = "An unknown error occurred!";
+    if (!errorRes.error || !errorRes.error.error) {
+      return throwError(errorMessage);
+    }
+    switch (errorRes.error.error.message) {
+      case "EMAIL_EXISTS":
+        errorMessage = "This email exists already";
+        break;
+      case "EMAIL_NOT_FOUND":
+        errorMessage = "This email does not exist.";
+        break;
+      case "INVALID_PASSWORD":
+        errorMessage = "This password is not correct.";
+        break;
+    }
+    return throwError(errorMessage);
   }
 }

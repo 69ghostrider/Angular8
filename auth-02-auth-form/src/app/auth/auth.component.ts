@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { AuthService } from "./auth.service";
 import { Component, SimpleChanges } from "@angular/core";
 import { NgForm } from "@angular/forms";
@@ -8,7 +9,7 @@ import { NgForm } from "@angular/forms";
   styleUrls: ["./auth.component.css"]
 })
 export class AuthComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
   isLoginMode = true;
   isLoading = false;
   error: string = null;
@@ -28,6 +29,7 @@ export class AuthComponent {
         responseData => {
           console.log(responseData);
           this.isLoading = false;
+          this.router.navigate(['/recipes']);
         },
         errorMessage => {
           this.error = errorMessage; //Alternate approach usig observable in lecture 294
@@ -39,6 +41,7 @@ export class AuthComponent {
         responseData => {
           console.log(responseData);
           this.isLoading = false;
+          this.router.navigate(['/recipes']);
         },
         errorMessage => {
           this.error = errorMessage;
